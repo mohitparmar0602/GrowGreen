@@ -69,7 +69,7 @@ export default function Checkout() {
 
     return (
         <div className="container py-10 px-4 max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-green-950 mb-8 text-center">Checkout</h1>
+            <h1 className="text-3xl font-bold text-green-950 dark:text-green-100 mb-8 text-center">Checkout</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Shipping Form */}
@@ -108,7 +108,7 @@ export default function Checkout() {
                 </Card>
 
                 {/* Order Summary */}
-                <Card className="bg-green-50/50">
+                <Card className="bg-green-50/50 dark:bg-green-900/10">
                     <CardHeader>
                         <CardTitle>Order Summary</CardTitle>
                     </CardHeader>

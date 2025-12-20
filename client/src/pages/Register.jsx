@@ -54,7 +54,7 @@ export default function Register() {
         // Let's verify with a more standard approach if vague: usually people want specific complexity.
         // But "alphanumeric" usually implies the character set.
         // I will implement: Must contain at least one letter AND at least one number.
-        
+
         const hasLetter = /[a-zA-Z]/.test(formData.password);
         const hasNumber = /[0-9]/.test(formData.password);
 
@@ -97,15 +97,15 @@ export default function Register() {
     }
 
     return (
-        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-green-50/30">
-            <Card className="w-full max-w-md border-green-100 shadow-xl bg-white/80 backdrop-blur-sm">
+        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-green-50/30 dark:bg-background">
+            <Card className="w-full max-w-md border-green-100 dark:border-border shadow-xl bg-white/80 dark:bg-card/80 backdrop-blur-sm">
                 <CardHeader className="space-y-1 text-center">
                     <div className="flex justify-center mb-4">
-                        <div className="p-3 bg-green-100 rounded-full">
+                        <div className="p-3 bg-green-100 dark:bg-primary/20 rounded-full">
                             <Leaf className="h-8 w-8 text-primary" />
                         </div>
                     </div>
-                    <CardTitle className="text-2xl font-bold tracking-tight text-green-950">
+                    <CardTitle className="text-2xl font-bold tracking-tight text-green-950 dark:text-foreground">
                         Create an account
                     </CardTitle>
                     <CardDescription>

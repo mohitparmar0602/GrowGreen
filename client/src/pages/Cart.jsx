@@ -49,10 +49,10 @@ export default function Cart() {
     if (cart.length === 0) {
         return (
             <div className="container py-20 flex flex-col items-center justify-center text-center">
-                <div className="bg-green-50 p-6 rounded-full mb-6">
-                    <Trash2 className="h-12 w-12 text-green-600" />
+                <div className="bg-green-50 dark:bg-primary/20 p-6 rounded-full mb-6">
+                    <Trash2 className="h-12 w-12 text-green-600 dark:text-primary" />
                 </div>
-                <h2 className="text-3xl font-bold text-green-950 mb-2">Your Cart is Empty</h2>
+                <h2 className="text-3xl font-bold text-green-950 dark:text-foreground mb-2">Your Cart is Empty</h2>
                 <p className="text-muted-foreground mb-8 text-lg max-w-md">
                     Looks like you haven't added any agricultural inputs yet. Start browsing to grow your farm!
                 </p>
@@ -65,7 +65,7 @@ export default function Cart() {
 
     return (
         <div className="container py-10 px-4">
-            <h1 className="text-3xl font-bold text-green-950 mb-8">Your Cart</h1>
+            <h1 className="text-3xl font-bold text-green-950 dark:text-foreground mb-8">Your Cart</h1>
 
             <div className="flex flex-col lg:flex-row gap-12">
                 {/* Cart Items List */}
@@ -83,7 +83,7 @@ export default function Cart() {
                             <div className="flex-1 text-center sm:text-left">
                                 <h3 className="font-semibold text-lg">{item.name}</h3>
                                 <p className="text-sm text-muted-foreground">{item.unit}</p>
-                                <p className="text-green-700 font-bold mt-1">₹{item.price}</p>
+                                <p className="text-green-700 dark:text-primary font-bold mt-1">₹{item.price}</p>
                             </div>
 
                             <div className="flex items-center gap-3">
@@ -129,7 +129,7 @@ export default function Cart() {
 
                 {/* Order Summary */}
                 <div className="lg:w-96">
-                    <Card className="bg-green-50/50 border-green-100 shadow-md">
+                    <Card className="bg-green-50/50 dark:bg-muted/50 border-green-100 dark:border-border shadow-md">
                         <CardHeader>
                             <CardTitle>Order Summary</CardTitle>
                         </CardHeader>
