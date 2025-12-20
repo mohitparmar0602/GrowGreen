@@ -29,6 +29,9 @@ export default function Navbar() {
                     <Link to="/" className="text-sm font-medium transition-colors hover:text-primary">
                         Home
                     </Link>
+                    <Link to="/marketplace" className="text-sm font-medium transition-colors hover:text-primary">
+                        Shopping
+                    </Link>
 
                     {user?.isAdmin && (
                         <>
