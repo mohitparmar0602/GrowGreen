@@ -13,88 +13,51 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/seed-mark
         process.exit(1);
     });
 
-const products = [
-    {
-        name: 'Organic Wheat Seeds',
+const products = [];
+
+// Generate 20 Seeds
+const seedNames = ['Golden Wheat', 'Royal Rice', 'Hybrid Tomato', 'Sweet Corn', 'Mustard', 'Sunflower', 'Cotton', 'Soybean', 'Barley', 'Oats', 'Millet', 'Sorghum', 'Pumpkin', 'Watermelon', 'Cucumber', 'Carrot', 'Radish', 'Spinach', 'Peas', 'Beans'];
+
+for (let i = 0; i < 20; i++) {
+    products.push({
+        name: `${i + 1}. ${seedNames[i % seedNames.length]} Seeds`,
         category: 'Seeds',
-        price: 1200,
+        price: Math.floor(Math.random() * 1000) + 100,
         unit: 'kg',
-        image: 'https://images.unsplash.com/photo-1501430654243-c934cec2e1c0?w=800&auto=format&fit=crop&q=60',
-        description: 'High-yield organic wheat seeds suitable for all climates.',
-        supplier: 'Green Earth Farms',
-        stock: 500
-    },
-    {
-        name: 'Premium NPK Fertilizer',
+        image: 'https://placehold.co/400x300?text=No+Image', // Placeholder
+        description: `High-quality ${seedNames[i % seedNames.length]} seeds for optimal yield.`,
+        supplier: i % 2 === 0 ? 'Green Earth Farms' : 'Sunny Fields',
+        stock: Math.floor(Math.random() * 500) + 50
+    });
+}
+
+// Generate 20 Fertilizers
+const fertNames = ['NPK 19-19-19', 'Urea', 'DAP', 'Potash', 'Organic Compost', 'Bone Meal', 'Fish Emulsion', 'Seaweed Extract', 'Cow Manure', 'Vermicompost', 'Zinc Sulphate', 'Magnesium Sulphate', 'Calcium Nitrate', 'Boron', 'Iron Chelate', 'Sulfur', 'Bio-Fertilizer', 'Growth Booster', 'Root Developer', 'Flower Enhancer'];
+
+for (let i = 0; i < 20; i++) {
+    products.push({
+        name: `${i + 1}. ${fertNames[i % fertNames.length]} Mix`,
         category: 'Fertilizers',
-        price: 850,
+        price: Math.floor(Math.random() * 2000) + 200,
         unit: 'bag',
-        image: '/products/npk_fertilizer.png',
-        description: 'Balanced Nitrogen, Phosphorus, and Potassium fertilizer.',
-        supplier: 'AgroChem Industries',
-        stock: 200
-    },
-    {
-        name: 'Hybrid Tomato Seeds',
-        category: 'Seeds',
-        price: 450,
-        unit: 'pkt',
-        image: '/products/tomato_seeds.png',
-        description: 'Disease-resistant tomato seeds for robust harvest.',
-        supplier: 'Veggie Grow',
-        stock: 1000
-    },
-    {
-        name: 'Organic Compost',
-        category: 'Fertilizers',
-        price: 300,
-        unit: 'bag',
-        image: '/products/organic_compost.png',
-        description: 'Rich organic compost to improve soil health.',
-        supplier: 'Nature Best',
-        stock: 300
-    },
-    {
-        name: 'Sunflower Seeds',
-        category: 'Seeds',
-        price: 600,
-        unit: 'kg',
-        image: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=800&auto=format&fit=crop&q=60',
-        description: 'High-quality sunflower seeds for oil extraction.',
-        supplier: 'Sunny Fields',
-        stock: 400
-    },
-    {
-        name: 'Urea Fertilizer',
-        category: 'Fertilizers',
-        price: 500,
-        unit: 'bag',
-        image: '/products/urea_fertilizer.png',
-        description: 'High nitrogen urea fertilizer for leafy growth.',
-        supplier: 'AgriCorp',
-        stock: 600
-    },
-    {
-        name: 'Pesticide Sprayer',
-        category: 'Tools',
-        price: 1500,
-        unit: 'piece',
-        image: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=800&auto=format&fit=crop&q=60',
-        description: 'Manual knapsack sprayer for pesticides.',
-        supplier: 'FarmTools Inc.',
-        stock: 150
-    },
-    {
-        name: 'Corn Seeds',
-        category: 'Seeds',
-        price: 250,
-        unit: 'kg',
-        image: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&auto=format&fit=crop&q=60',
-        description: 'Sweet corn seeds for commercial farming.',
-        supplier: 'CornPlus',
-        stock: 800
-    }
-];
+        image: 'https://placehold.co/400x300?text=No+Image', // Placeholder
+        description: `Premium quality ${fertNames[i % fertNames.length]} for healthy plant growth.`,
+        supplier: i % 2 === 0 ? 'AgroChem Industries' : 'Nature Best',
+        stock: Math.floor(Math.random() * 300) + 20
+    });
+}
+
+// Tools (keep a few)
+products.push({
+    name: 'Pesticide Sprayer',
+    category: 'Tools',
+    price: 1500,
+    unit: 'piece',
+    image: 'https://placehold.co/400x300?text=No+Image',
+    description: 'Manual knapsack sprayer for pesticides.',
+    supplier: 'FarmTools Inc.',
+    stock: 150
+});
 
 const importData = async () => {
     try {

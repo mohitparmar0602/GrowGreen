@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Leaf, Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react';
 import { cn } from '../lib/utils';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -12,6 +13,43 @@ export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
+
+    // Check for token in URL (from Google redirect)
+    React.useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        const token = query.get('token');
+        if (token) {
+            // Decode token to get user info (or make an API call)
+            // For simplicity, we'll just store token and fetch profile or decode purely on client
+            // Ideally backend sends user info too, or we fetch /me
+            // Here we will do a quick hack: login with just token and assume auth context handles validation
+            // But AuthContext expects user object. Let's fetch me.
+
+            // Actually, let's just use the token and force a reload/verify if AuthContext supports it
+            // Or better: decode base64 payload to get user details if strictly needed right now
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                const user = JSON.parse(jsonPayload);
+
+                login({
+                    id: user.id,
+                    isAdmin: user.isAdmin,
+                    // username/email might not be in payload depending on auth.js sign()
+                    // But usually we put essential info. 
+                    // Let's assume the basics are there or we don't need them immediately for the redirect.
+                }, token);
+                navigate('/');
+            } catch (e) {
+                console.error("Failed to process Google login token", e);
+                setError("Google Login failed");
+            }
+        }
+    }, [navigate, login]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -24,8 +62,8 @@ export default function Login() {
                 password
             });
             // Store token
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
+            // Store token
+            login(res.data.user, res.data.token);
             navigate('/');
         } catch (err) {
             console.error(err);
@@ -129,6 +167,9 @@ export default function Login() {
                             </span>
                         </div>
                     </div>
+
+
+
                     <div>
                         Don&apos;t have an account?{" "}
                         <Link to="/register" className="font-semibold text-primary hover:underline">
@@ -137,6 +178,6 @@ export default function Login() {
                     </div>
                 </CardFooter>
             </Card>
-        </div>
+        </div >
     );
 }

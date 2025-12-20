@@ -10,7 +10,8 @@ export default function Register() {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        password: ''
+        password: '',
+        role: 'farmer'
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -36,7 +37,9 @@ export default function Register() {
                 navigate('/login');
             }, 2000);
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed. Please try again.');
+            console.error("Full Registration Error:", err);
+            const msg = err.response?.data?.message || err.message || 'Registration failed. Please try again.';
+            setError(msg);
         } finally {
             setIsLoading(false);
         }
@@ -51,7 +54,7 @@ export default function Register() {
                     </div>
                     <h2 className="text-2xl font-bold text-green-950 mb-2">Registration Successful!</h2>
                     <p className="text-muted-foreground mb-4">
-                        Welcome to AgriMarket, {formData.username}! A confirmation email has been sent.
+                        Welcome to Grow Green, {formData.username}! A confirmation email has been sent.
                     </p>
                     <p className="text-sm text-green-700">Redirecting to login...</p>
                 </Card>
@@ -72,7 +75,7 @@ export default function Register() {
                         Create an account
                     </CardTitle>
                     <CardDescription>
-                        Join our community of farmers and suppliers
+                        Join our community of verified farmers
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

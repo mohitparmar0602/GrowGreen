@@ -2,11 +2,49 @@ import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
-import { Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Trash2, Plus, Minus, ArrowRight, Loader } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 export default function Cart() {
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const [isPlacingOrder, setIsPlacingOrder] = React.useState(false);
+
+    const handlePlaceOrder = async () => {
+        if (!user) {
+            alert("Please login to place an order.");
+            navigate('/login');
+            return;
+        }
+
+        setIsPlacingOrder(true);
+        try {
+            const orderData = {
+                customerName: user.username || user.email, // Fallback if username missing
+                customerEmail: user.email,
+                products: cart.map(item => ({
+                    product: item._id, // Assuming item._id is the product ID
+                    quantity: item.quantity,
+                    price: item.price
+                })),
+                totalAmount: cartTotal
+            };
+
+            await axios.post('http://localhost:5000/api/orders', orderData);
+
+            clearCart();
+            alert("Order placed successfully!");
+            navigate('/marketplace'); // Redirect to marketplace or orders page
+        } catch (error) {
+            console.error("Error placing order:", error);
+            alert("Failed to place order. Please try again.");
+        } finally {
+            setIsPlacingOrder(false);
+        }
+    };
 
     if (cart.length === 0) {
         return (
@@ -110,8 +148,8 @@ export default function Cart() {
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full" size="lg" asChild>
-                                <Link to="/checkout">Proceed to Checkout</Link>
+                            <Button className="w-full" size="lg" onClick={() => navigate('/checkout')}>
+                                Proceed to Checkout
                             </Button>
                         </CardFooter>
                     </Card>

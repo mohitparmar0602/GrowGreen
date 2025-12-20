@@ -4,33 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const User = require('../models/User');
-
-// Email Transporter Config
-// In a real app, use environment variables for credentials
-const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: 'ethereal.user@ethereal.email', // Placeholder
-        pass: 'password' // Placeholder
-    }
-});
-
-// Mock sending email function if no real credentials
-const sendWelcomeEmail = async (email, username) => {
-    console.log(`[Mock Email Service] Sending welcome email to ${email} for user ${username}`);
-    console.log(`[Mock Email Content] Subject: Welcome to AgriMarket!`);
-    console.log(`[Mock Email Content] Body: Hi ${username}, thank you for registering!`);
-    // In production, uncomment the below:
-    /*
-    await transporter.sendMail({
-        from: '"AgriMarket" <noreply@agrimarket.com>',
-        to: email,
-        subject: "Welcome to AgriMarket!",
-        text: `Hi ${username}, thank you for registering with AgriMarket. We are glad to have you!`
-    });
-    */
-};
+const { sendWelcomeEmail, sendLoginNotification } = require('../utils/email');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -43,9 +17,7 @@ router.post('/register', async (req, res) => {
         }
 
         // Check availability
-        const existingUser = await User.findOne({
-            $or: [{ email }, { username }]
-        });
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
@@ -63,8 +35,13 @@ router.post('/register', async (req, res) => {
 
         const savedUser = await newUser.save();
 
-        // Send Email
-        await sendWelcomeEmail(email, username);
+        // Send Email (Non-blocking)
+        try {
+            await sendWelcomeEmail(email, username);
+        } catch (emailError) {
+            console.error("Warning: Welcome email could not be sent:", emailError.message);
+            // Continue execution - do not fail registration
+        }
 
         // Create Token
         const token = jwt.sign(
@@ -85,6 +62,9 @@ router.post('/register', async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        if (err.code === 'EAUTH' || err.message.includes('Invalid login')) {
+            return res.status(500).json({ message: 'User created, but email failed: Check Server SMTP Credentials' });
+        }
         res.status(500).json({ message: 'Server Error' });
     }
 });
@@ -123,6 +103,9 @@ router.post('/login', async (req, res) => {
             { expiresIn: '1h' }
         );
 
+        // Send Login Notification asynchronously (don't await to block response)
+        sendLoginNotification(user.email, user.username).catch(err => console.error("Login email failed:", err));
+
         res.json({
             token,
             user: {
@@ -138,5 +121,8 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 });
+
+
+
 
 module.exports = router;
