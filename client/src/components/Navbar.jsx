@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '../lib/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Leaf, User } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { Badge } from './ui/badge';
@@ -17,6 +17,7 @@ import {
 export default function Navbar() {
     const { cartCount, clearCart } = useCart();
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     return (
         <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -59,6 +60,7 @@ export default function Navbar() {
                                 <DropdownMenuItem onClick={() => {
                                     clearCart();
                                     logout();
+                                    navigate('/');
                                 }} className="text-red-600 focus:text-red-600">
                                     Logout
                                 </DropdownMenuItem>
@@ -75,8 +77,11 @@ export default function Navbar() {
                         </>
                     )}
 
-                    {!user?.isAdmin && (
-                        <Link to="/cart" className="relative transition-colors hover:text-primary group">
+                    {user && !user.isAdmin && (
+                        <div
+                            className="relative transition-colors hover:text-primary group cursor-pointer"
+                            onClick={() => navigate('/cart')}
+                        >
                             <div className="relative">
                                 <ShoppingCart className="h-6 w-6" />
                                 {cartCount > 0 && (
@@ -85,7 +90,7 @@ export default function Navbar() {
                                     </Badge>
                                 )}
                             </div>
-                        </Link>
+                        </div>
                     )}
                 </div>
             </div>

@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
 const User = require('../models/User');
-const { sendWelcomeEmail, sendLoginNotification } = require('../utils/email');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -14,6 +12,17 @@ router.post('/register', async (req, res) => {
         // Validation
         if (!username || !email || !password) {
             return res.status(400).json({ message: 'Please enter all fields' });
+        }
+
+        if (!email.includes('@')) {
+            return res.status(400).json({ message: 'Email must contain @' });
+        }
+
+        const hasLetter = /[a-zA-Z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+
+        if (!hasLetter || !hasNumber) {
+            return res.status(400).json({ message: 'Password must be alphanumeric (contain both letters and numbers)' });
         }
 
         // Check availability
@@ -34,14 +43,6 @@ router.post('/register', async (req, res) => {
         });
 
         const savedUser = await newUser.save();
-
-        // Send Email (Non-blocking)
-        try {
-            await sendWelcomeEmail(email, username);
-        } catch (emailError) {
-            console.error("Warning: Welcome email could not be sent:", emailError.message);
-            // Continue execution - do not fail registration
-        }
 
         // Create Token
         const token = jwt.sign(
@@ -80,11 +81,8 @@ router.post('/login', async (req, res) => {
         }
 
         // Check user
-        // Allow login with either username or email (User asked for admin/admin@123, typical pattern)
-        // Adjusting finding logic to accept email or username field as 'email' input
-        const user = await User.findOne({
-            $or: [{ email: email }, { username: email }]
-        });
+        // Strictly check by email only as per new requirement
+        const user = await User.findOne({ email });
 
         if (!user) {
             return res.status(400).json({ message: 'User does not exist' });
@@ -102,9 +100,6 @@ router.post('/login', async (req, res) => {
             process.env.JWT_SECRET || 'secret_key_123',
             { expiresIn: '1h' }
         );
-
-        // Send Login Notification asynchronously (don't await to block response)
-        sendLoginNotification(user.email, user.username).catch(err => console.error("Login email failed:", err));
 
         res.json({
             token,
