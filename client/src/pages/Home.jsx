@@ -9,14 +9,14 @@ export default function Home() {
     return (
         <div className="flex flex-col min-h-[calc(100vh-4rem)]">
             {/* Hero Section */}
-            <section className="relative flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-emerald-50 overflow-hidden py-24 px-4 lg:py-32">
+            <section className="relative flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-green-950/20 dark:via-background dark:to-emerald-950/20 overflow-hidden py-24 px-4 lg:py-32">
                 <div className="container max-w-6xl flex flex-col md:flex-row items-center gap-16 relative z-10">
                     <div className="flex-1 space-y-8 text-center md:text-left">
 
-                        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-green-950 leading-[1.1]">
+                        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-green-950 dark:text-foreground leading-[1.1]">
                             Cultivating <span className="text-green-600">Success</span> Together
                         </h1>
-                        <p className="text-lg text-slate-600 md:text-xl max-w-2xl font-medium leading-relaxed mx-auto md:mx-0">
+                        <p className="text-lg text-slate-600 dark:text-muted-foreground md:text-xl max-w-2xl font-medium leading-relaxed mx-auto md:mx-0">
                             Connect with trusted suppliers for premium seeds, fertilizers, and farming equipment. Empowering your harvest from sowing to established growth.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-2">
@@ -27,7 +27,7 @@ export default function Home() {
                             </Button>
                         </div>
 
-                        <div className="pt-8 flex items-center justify-center md:justify-start gap-8 text-sm font-medium text-slate-500">
+                        <div className="pt-8 flex items-center justify-center md:justify-start gap-8 text-sm font-medium text-slate-500 dark:text-muted-foreground">
                             <div className="flex items-center gap-2">
                                 <ShieldCheck className="h-5 w-5 text-green-600" />
                                 <span>Verified Suppliers</span>
@@ -35,9 +35,8 @@ export default function Home() {
 
                         </div>
                     </div>
-                    {/* Hero Image */}
                     <div className="flex-1 relative w-full max-w-lg md:max-w-none">
-                        <div className="relative z-10 bg-white p-3 rounded-3xl shadow-2xl transform rotate-2 hover:rotate-0 transition-all duration-500 ease-out">
+                        <div className="relative z-10 bg-white dark:bg-card p-3 rounded-3xl shadow-2xl transform rotate-2 hover:rotate-0 transition-all duration-500 ease-out">
                             <img
                                 src="/hero_modern_farming_uploaded.jpg"
                                 alt="Modern Farming"
@@ -54,9 +53,9 @@ export default function Home() {
 
 
             {/* Why Choose Us (Redesigned Features) */}
-            <section className="py-24 bg-white">
+            <section className="py-24 bg-white dark:bg-background">
                 <div className="container max-w-6xl px-4 mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-green-950">Why Farmers Trust Us</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-green-950 dark:text-foreground">Why Farmers Trust Us</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         <FeatureCard
                             icon={<Sprout className="h-8 w-8 text-white" />}
@@ -112,14 +111,14 @@ export default function Home() {
 
 function FeatureCard({ icon, title, description, color }) {
     return (
-        <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+        <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group bg-card">
             <CardContent className="flex flex-col items-center text-center p-8 space-y-6">
                 <div className={`p-4 rounded-2xl shadow-md ${color} transform group-hover:-translate-y-2 transition-transform duration-300`}>
                     {icon}
                 </div>
                 <div>
-                    <h3 className="text-xl font-bold text-green-950 mb-2">{title}</h3>
-                    <p className="text-slate-600 leading-relaxed">{description}</p>
+                    <h3 className="text-xl font-bold text-green-950 dark:text-foreground mb-2">{title}</h3>
+                    <p className="text-slate-600 dark:text-muted-foreground leading-relaxed">{description}</p>
                 </div>
             </CardContent>
         </Card>

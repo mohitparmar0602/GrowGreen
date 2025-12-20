@@ -45,14 +45,14 @@ export default function AdminDashboard() {
 
     return (
         <div className="container py-8 px-4 mx-auto max-w-7xl">
-            <h1 className="text-3xl font-bold text-green-950 mb-8">Admin Dashboard</h1>
+            <h1 className="text-3xl font-bold text-green-950 dark:text-foreground mb-8">Admin Dashboard</h1>
 
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-                        <IndianRupee className="h-4 w-4 text-green-600" />
+                        <IndianRupee className="h-4 w-4 text-green-600 dark:text-green-400" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">₹{totalRevenue.toLocaleString()}</div>
@@ -62,7 +62,7 @@ export default function AdminDashboard() {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Active Farmers</CardTitle>
-                        <Users className="h-4 w-4 text-blue-600" />
+                        <Users className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{farmers.length}</div>
@@ -72,7 +72,7 @@ export default function AdminDashboard() {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Suppliers</CardTitle>
-                        <Store className="h-4 w-4 text-amber-600" />
+                        <Store className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{suppliers.length}</div>
@@ -82,7 +82,7 @@ export default function AdminDashboard() {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Low Stock Items</CardTitle>
-                        <AlertTriangle className="h-4 w-4 text-red-600" />
+                        <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">
@@ -105,11 +105,11 @@ export default function AdminDashboard() {
                     <CardContent>
                         <div className="space-y-4">
                             {stock.map((item, i) => (
-                                <div key={i} className="flex items-center justify-between border-b pb-2 last:border-0 hover:bg-slate-50 p-2 rounded">
+                                <div key={i} className="flex items-center justify-between border-b pb-2 last:border-0 hover:bg-muted/50 p-2 rounded transition-colors">
                                     <div className="font-medium">{item.product}</div>
-                                    <div className={`text-sm font-bold px-2 py-1 rounded ${item.status === 'In Stock' ? 'bg-green-100 text-green-700' :
-                                        item.status === 'Low Stock' ? 'bg-yellow-100 text-yellow-700' :
-                                            'bg-red-100 text-red-700'
+                                    <div className={`text-sm font-bold px-2 py-1 rounded ${item.status === 'In Stock' ? 'bg-green-500/15 text-green-700 dark:text-green-400' :
+                                        item.status === 'Low Stock' ? 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-400' :
+                                            'bg-destructive/15 text-destructive dark:text-red-400'
                                         }`}>
                                         {item.status} ({item.stock})
                                     </div>

@@ -6,8 +6,8 @@ export default function Marketplace() {
     return (
         <div className="container py-16 px-4">
             <div className="text-center mb-16 space-y-4">
-                <h1 className="text-4xl md:text-5xl font-bold text-green-950">Marketplace Categories</h1>
-                <p className="text-slate-600 max-w-2xl mx-auto text-lg">Select a category to browse our wide range of agricultural products.</p>
+                <h1 className="text-4xl md:text-5xl font-bold text-green-950 dark:text-foreground">Marketplace Categories</h1>
+                <p className="text-slate-600 dark:text-muted-foreground max-w-2xl mx-auto text-lg">Select a category to browse our wide range of agricultural products.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
