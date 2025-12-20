@@ -28,7 +28,41 @@ export default function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+
         setError('');
+
+        if (!formData.email.includes('@')) {
+            setError('Email must contain @');
+            setIsLoading(false);
+            return;
+        }
+
+        const alphanumericRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$/;
+        // Or if "alphanumeric" just means "only letters and numbers allowed", use: /^[a-zA-Z0-9]+$/
+        // User asked for "alphanumeric", usually implies "letters and numbers".
+        // Let's stick to the plan: "at least one letter and one number" is often what people mean by "alphanumeric requirements" but strictly "alphanumeric" often means "only [a-z0-9]".
+        // However, a password usually requires complexity. "alphanumeric" as a constraint often means "must contain letters and numbers".
+        // Let's assume the user meant "must contain at least one letter and at least one number" as per plan. 
+        // Wait, "alphanumeric" literally means "consisting of or using both letters and numerals".
+        // Let's implement robust check: must contain letter, must contain number.
+        // And for the "only alphanumeric" interpretation?
+        // "password to be alphanumeric" -> stronger constraint probably means "ONLY alphanumeric" (no special chars)?
+        // OR "must have alpha AND numeric"?
+        // Given common patterns, I'll go with "must contain letters and numbers" to be safe on complexity, but simply checking regex /^[a-zA-Z0-9]+$/ might be what they literally asked (no special chars).
+        // Let's support special chars but REQUIRE alpha and numeric?
+        // Actually, user said "password to be alphanumeric". This often means "Only letters and numbers".
+        // Let's verify with a more standard approach if vague: usually people want specific complexity.
+        // But "alphanumeric" usually implies the character set.
+        // I will implement: Must contain at least one letter AND at least one number.
+        
+        const hasLetter = /[a-zA-Z]/.test(formData.password);
+        const hasNumber = /[0-9]/.test(formData.password);
+
+        if (!hasLetter || !hasNumber) {
+            setError('Password must be alphanumeric (contain both letters and numbers)');
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const res = await axios.post('http://localhost:5000/api/auth/register', formData);
