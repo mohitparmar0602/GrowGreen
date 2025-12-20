@@ -19,14 +19,16 @@ import {
 export default function Navbar() {
     const { cartCount, clearCart } = useCart();
     const { user, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
-    const { theme, toggleTheme } = useTheme();
+
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const isActive = (path) => {
-        return location.pathname === path ? "text-primary font-semibold" : "text-foreground/80 hover:text-foreground";
-    };
+    const isActive = (path) =>
+        location.pathname === path
+            ? "text-primary font-semibold"
+            : "text-foreground/80 hover:text-foreground";
 
     const NavLinks = ({ mobile = false, closeMenu }) => (
         <>
@@ -37,6 +39,7 @@ export default function Navbar() {
             >
                 Home
             </Link>
+
             <Link
                 to="/marketplace"
                 className={cn("transition-colors hover:text-primary", isActive('/marketplace'), mobile ? "py-2 text-lg" : "text-sm font-medium")}
@@ -44,6 +47,7 @@ export default function Navbar() {
             >
                 Marketplace
             </Link>
+
             {user?.isAdmin && (
                 <>
                     <Link
@@ -66,46 +70,38 @@ export default function Navbar() {
     );
 
     return (
-        <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+        <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
             <div className="container max-w-7xl mx-auto flex h-16 items-center px-4 justify-between">
-                {/* 1. Mobile Menu Trigger (Left on Mobile) */}
-                <div className="md:hidden mr-2">
+
+                {/* Mobile Menu Button */}
+                <div className="md:hidden">
                     <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                        {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                        {isMobileMenuOpen ? <X /> : <Menu />}
                     </Button>
                 </div>
 
-                {/* 2. Brand (Left/Center) */}
-                <div className="flex items-center mr-4 md:mr-8">
-                    <Link to="/" className="flex items-center gap-2 font-bold text-xl text-primary tracking-tight">
-                        <Leaf className="h-6 w-6" />
-                        <span>Grow Green</span>
-                    </Link>
-                </div>
+                {/* Logo */}
+                <Link to="/" className="flex items-center gap-2 font-bold text-xl text-primary">
+                    <Leaf className="h-6 w-6" />
+                    Grow Green
+                </Link>
 
-                {/* 3. Navigation (Center - Desktop) */}
-                <div className="hidden md:flex flex-1 items-center justify-center gap-6">
+                {/* Desktop Nav */}
+                <div className="hidden md:flex gap-6">
                     <NavLinks />
                 </div>
 
-                {/* 4. Actions (Right) */}
-                <div className="flex flex-1 items-center justify-end gap-2 md:gap-4">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={toggleTheme}
-                        className="rounded-full h-9 w-9 text-foreground/80 hover:text-foreground"
-                    >
-                        {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                {/* Right Actions */}
+                <div className="flex items-center gap-3">
+                    <Button variant="ghost" size="icon" onClick={toggleTheme}>
+                        {theme === 'light' ? <Moon /> : <Sun />}
                     </Button>
 
                     {!user?.isAdmin && (
-                        <div className="relative group cursor-pointer mr-2" onClick={() => navigate('/cart')}>
-                            <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 text-foreground/80 hover:text-foreground">
-                                <ShoppingCart className="h-4 w-4" />
-                            </Button>
+                        <div className="relative cursor-pointer" onClick={() => navigate('/cart')}>
+                            <ShoppingCart />
                             {cartCount > 0 && (
-                                <Badge className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center rounded-full p-0 text-[10px] bg-primary text-primary-foreground pointer-events-none">
+                                <Badge className="absolute -top-2 -right-2">
                                     {cartCount}
                                 </Badge>
                             )}
@@ -114,66 +110,45 @@ export default function Navbar() {
 
                     {user ? (
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="focus:outline-none ring-offset-background transition-opacity hover:opacity-80">
-                                <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 text-primary font-bold overflow-hidden">
-                                    {user.username ? (
-                                        user.username.charAt(0).toUpperCase()
-                                    ) : (
-                                        <User className="h-4 w-4" />
-                                    )}
+                            <DropdownMenuTrigger>
+                                <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
+                                    {user.username?.[0]?.toUpperCase() || <User />}
                                 </div>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56">
+                            <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>
-                                    <div className="flex flex-col space-y-1">
-                                        <p className="text-sm font-medium leading-none">{user.username}</p>
-                                        <p className="text-xs leading-none text-muted-foreground">{user.mobileNo || user.email}</p>
-                                    </div>
+                                    {user.username}
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => window.location.href = (user.isAdmin ? '/admin/dashboard' : '/profile')}>
-                                    <span className="w-full cursor-pointer">{user.isAdmin ? 'Dashboard' : 'Profile'}</span>
+                                <DropdownMenuItem onClick={() => navigate(user.isAdmin ? '/admin/dashboard' : '/profile')}>
+                                    {user.isAdmin ? 'Dashboard' : 'Profile'}
                                 </DropdownMenuItem>
-                                {user.isAdmin && (
-                                    <>
-                                        <DropdownMenuItem onClick={() => window.location.href = '/suppliers'}>Suppliers</DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => window.location.href = '/farmers'}>Farmers</DropdownMenuItem>
-                                    </>
-                                )}
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => {
-                                    clearCart();
-                                    logout();
-                                    navigate('/');
-                                }} className="text-destructive focus:text-destructive cursor-pointer">
-                                    Log out
+                                <DropdownMenuItem
+                                    className="text-destructive"
+                                    onClick={() => {
+                                        clearCart();
+                                        logout();
+                                        navigate('/');
+                                    }}
+                                >
+                                    Logout
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
-                        <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
-                                <Link to="/login">Log in</Link>
-                            </Button>
-                            <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-                                <Link to="/register">Sign up</Link>
-                            </Button>
-                        </div>
+                        <>
+                            <Link to="/login">Login</Link>
+                            <Link to="/register">Register</Link>
+                        </>
                     )}
                 </div>
             </div>
 
-            {/* Mobile Menu Overlay */}
+            {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="md:hidden border-t bg-background/95 backdrop-blur-md absolute w-full p-4 flex flex-col gap-4 shadow-lg animate-in slide-in-from-top-2">
-                    <NavLinks mobile={true} closeMenu={() => setIsMobileMenuOpen(false)} />
-                    {!user && (
-                        <div className="flex flex-col gap-2 mt-2 pt-2 border-t">
-                            <Button variant="ghost" asChild onClick={() => setIsMobileMenuOpen(false)}>
-                                <Link to="/login">Log in</Link>
-                            </Button>
-                        </div>
-                    )}
+                <div className="md:hidden p-4 flex flex-col gap-4 border-t">
+                    <NavLinks mobile closeMenu={() => setIsMobileMenuOpen(false)} />
                 </div>
             )}
         </nav>
