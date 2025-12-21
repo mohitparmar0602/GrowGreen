@@ -21,6 +21,14 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    mobileNo: {
+        type: String,
+        default: ''
+    },
+    address: {
+        type: String,
+        default: ''
+    },
     createdAt: {
         type: Date,
         default: Date.now

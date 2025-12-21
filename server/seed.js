@@ -97,17 +97,24 @@ const importData = async () => {
         await Product.insertMany(products);
 
         // Seed Admin User
-        await User.deleteMany();
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash('admin@123', salt);
+        // Check if admin exists to avoid duplicates or overwriting
+        const adminExists = await User.findOne({ email: 'admin@agrimarket.com' });
 
-        await User.create({
-            username: 'admin',
-            email: 'admin@agrimarket.com',
-            password: hashedPassword,
-            isAdmin: true
-        });
-        console.log('Admin User Created: admin / admin@123');
+        if (!adminExists) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash('admin@123', salt);
+
+            await User.create({
+                username: 'admin',
+                email: 'admin@agrimarket.com',
+                password: hashedPassword,
+                isAdmin: true
+            });
+            console.log('Admin User Created: admin / admin@123');
+        } else {
+            console.log('Admin User already exists.');
+        }
+
         console.log('Data Imported Successfully!');
         process.exit();
     } catch (error) {
