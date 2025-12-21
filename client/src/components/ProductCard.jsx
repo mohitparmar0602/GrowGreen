@@ -9,8 +9,8 @@ export default function ProductCard({ product }) {
     const { addToCart } = useCart();
 
     return (
-        <Card className="overflow-hidden hover:shadow-lg transition-shadow border-green-100">
-            <div className="aspect-square relative overflow-hidden bg-white p-4">
+        <Card className="overflow-hidden hover:shadow-lg transition-shadow border-green-100 dark:border-border bg-card">
+            <div className="aspect-square relative overflow-hidden bg-white dark:bg-muted p-4">
                 <img
                     src={product.image}
                     alt={product.name}
@@ -21,15 +21,15 @@ export default function ProductCard({ product }) {
                 </Badge>
             </div>
             <CardHeader className="p-4 pb-2">
-                <CardTitle className="line-clamp-1 text-lg text-green-950">{product.name}</CardTitle>
+                <CardTitle className="line-clamp-1 text-lg text-green-950 dark:text-foreground">{product.name}</CardTitle>
                 <p className="text-sm text-muted-foreground line-clamp-2 min-h-[2.5rem]">
                     {product.description}
                 </p>
             </CardHeader>
             <CardContent className="p-4 pt-0">
                 <div className="flex items-baseline justify-between mt-2">
-                    <span className="text-xl font-bold text-green-700">₹{product.price}</span>
-                    <span className="text-sm text-gray-500">/{product.unit}</span>
+                    <span className="text-xl font-bold text-green-700 dark:text-primary">₹{product.price}</span>
+                    <span className="text-sm text-gray-500 dark:text-muted-foreground">/{product.unit}</span>
                 </div>
                 <div className="text-xs text-gray-400 mt-1">
                     By {product.supplier} · Stock: {product.stock || '100+'}

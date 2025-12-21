@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '../lib/utils';
-import { Link } from 'react-router-dom';
-import { ShoppingCart, Leaf, User } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { ShoppingCart, Leaf, User, Sun, Moon, Menu, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -17,78 +19,138 @@ import {
 export default function Navbar() {
     const { cartCount, clearCart } = useCart();
     const { user, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const isActive = (path) =>
+        location.pathname === path
+            ? "text-primary font-semibold"
+            : "text-foreground/80 hover:text-foreground";
+
+    const NavLinks = ({ mobile = false, closeMenu }) => (
+        <>
+            <Link
+                to="/"
+                className={cn("transition-colors hover:text-primary", isActive('/'), mobile ? "py-2 text-lg" : "text-sm font-medium")}
+                onClick={closeMenu}
+            >
+                Home
+            </Link>
+
+            <Link
+                to="/marketplace"
+                className={cn("transition-colors hover:text-primary", isActive('/marketplace'), mobile ? "py-2 text-lg" : "text-sm font-medium")}
+                onClick={closeMenu}
+            >
+                Marketplace
+            </Link>
+
+            {user?.isAdmin && (
+                <>
+                    <Link
+                        to="/suppliers"
+                        className={cn("transition-colors hover:text-primary", isActive('/suppliers'), mobile ? "py-2 text-lg" : "text-sm font-medium")}
+                        onClick={closeMenu}
+                    >
+                        Suppliers
+                    </Link>
+                    <Link
+                        to="/farmers"
+                        className={cn("transition-colors hover:text-primary", isActive('/farmers'), mobile ? "py-2 text-lg" : "text-sm font-medium")}
+                        onClick={closeMenu}
+                    >
+                        Farmers
+                    </Link>
+                </>
+            )}
+        </>
+    );
 
     return (
-        <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+        <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
+            <div className="container max-w-7xl mx-auto flex h-16 items-center px-4 justify-between">
+
+                {/* Mobile Menu Button */}
+                <div className="md:hidden">
+                    <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                        {isMobileMenuOpen ? <X /> : <Menu />}
+                    </Button>
+                </div>
+
+                {/* Logo */}
                 <Link to="/" className="flex items-center gap-2 font-bold text-xl text-primary">
                     <Leaf className="h-6 w-6" />
-                    <span>Grow Green</span>
+                    Grow Green
                 </Link>
-                <div className="flex items-center gap-6">
-                    <Link to="/" className="text-sm font-medium transition-colors hover:text-primary">
-                        Home
-                    </Link>
 
-                    {user?.isAdmin && (
-                        <>
-                            <Link to="/suppliers" className="text-sm font-medium transition-colors hover:text-primary">
-                                Suppliers
-                            </Link>
-                            <Link to="/farmers" className="text-sm font-medium transition-colors hover:text-primary">
-                                Farmers
-                            </Link>
-                        </>
+                {/* Desktop Nav */}
+                <div className="hidden md:flex gap-6">
+                    <NavLinks />
+                </div>
+
+                {/* Right Actions */}
+                <div className="flex items-center gap-3">
+                    <Button variant="ghost" size="icon" onClick={toggleTheme}>
+                        {theme === 'light' ? <Moon /> : <Sun />}
+                    </Button>
+
+                    {!user?.isAdmin && (
+                        <div className="relative cursor-pointer" onClick={() => navigate('/cart')}>
+                            <ShoppingCart />
+                            {cartCount > 0 && (
+                                <Badge className="absolute -top-2 -right-2">
+                                    {cartCount}
+                                </Badge>
+                            )}
+                        </div>
                     )}
 
                     {user ? (
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="focus:outline-none">
-                                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 hover:bg-green-200 transition-colors" title={user.username}>
-                                    <User className="h-5 w-5" />
+                            <DropdownMenuTrigger>
+                                <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
+                                    {user.username?.[0]?.toUpperCase() || <User />}
                                 </div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                <DropdownMenuLabel>
+                                    {user.username}
+                                </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => window.location.href = (user.isAdmin ? '/admin/dashboard' : '/profile')}>
-                                    <span className="w-full">{user.isAdmin ? 'Dashboard' : 'Profile'}</span>
+                                <DropdownMenuItem onClick={() => navigate(user.isAdmin ? '/admin/dashboard' : '/profile')}>
+                                    {user.isAdmin ? 'Dashboard' : 'Profile'}
                                 </DropdownMenuItem>
-
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => {
-                                    clearCart();
-                                    logout();
-                                }} className="text-red-600 focus:text-red-600">
+                                <DropdownMenuItem
+                                    className="text-destructive"
+                                    onClick={() => {
+                                        clearCart();
+                                        logout();
+                                        navigate('/');
+                                    }}
+                                >
                                     Logout
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
                         <>
-                            <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary">
-                                Login
-                            </Link>
-                            <Link to="/register" className="text-sm font-medium transition-colors hover:text-primary">
-                                Sign Up
-                            </Link>
+                            <Link to="/login">Login</Link>
+                            <Link to="/register">Register</Link>
                         </>
-                    )}
-
-                    {!user?.isAdmin && (
-                        <Link to="/cart" className="relative transition-colors hover:text-primary group">
-                            <div className="relative">
-                                <ShoppingCart className="h-6 w-6" />
-                                {cartCount > 0 && (
-                                    <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center rounded-full p-0 text-[10px] bg-red-600 text-white hover:bg-red-700">
-                                        {cartCount}
-                                    </Badge>
-                                )}
-                            </div>
-                        </Link>
                     )}
                 </div>
             </div>
+
+            {/* Mobile Menu */}
+            {isMobileMenuOpen && (
+                <div className="md:hidden p-4 flex flex-col gap-4 border-t">
+                    <NavLinks mobile closeMenu={() => setIsMobileMenuOpen(false)} />
+                </div>
+            )}
         </nav>
     );
 }

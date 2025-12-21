@@ -9,7 +9,7 @@ export default function Farmers() {
 
     return (
         <div className="container py-12 px-4 mx-auto max-w-6xl">
-            <h1 className="text-3xl font-bold text-green-950 mb-8">Registered Farmers</h1>
+            <h1 className="text-3xl font-bold text-green-950 dark:text-foreground mb-8">Registered Farmers</h1>
 
             <Card>
                 <CardHeader>
@@ -31,24 +31,24 @@ export default function Farmers() {
                                     <tr key={farmer.id} className="border-b transition-colors hover:bg-muted/50">
                                         <td className="p-4 align-middle font-medium">
                                             <div className="flex items-center gap-2">
-                                                <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-700">
+                                                <div className="h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-700 dark:text-green-400">
                                                     <User className="h-4 w-4" />
                                                 </div>
                                                 {farmer.name}
                                             </div>
                                         </td>
                                         <td className="p-4 align-middle">
-                                            <div className="flex items-center gap-2 text-slate-600">
+                                            <div className="flex items-center gap-2 text-slate-600 dark:text-muted-foreground">
                                                 <MapPin className="h-4 w-4" /> {farmer.location}
                                             </div>
                                         </td>
                                         <td className="p-4 align-middle">
-                                            <div className="flex items-center gap-2 text-slate-600">
+                                            <div className="flex items-center gap-2 text-slate-600 dark:text-muted-foreground">
                                                 <Sprout className="h-4 w-4" /> {farmer.crop}
                                             </div>
                                         </td>
                                         <td className="p-4 align-middle">
-                                            <div className="flex items-center gap-2 text-slate-600">
+                                            <div className="flex items-center gap-2 text-slate-600 dark:text-muted-foreground">
                                                 <Phone className="h-4 w-4" /> {farmer.contact}
                                             </div>
                                         </td>

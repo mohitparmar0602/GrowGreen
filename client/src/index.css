@@ -3,7 +3,84 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 140 30% 98%;
+    /* Very light green tint */
+    --foreground: 150 50% 5%;
+    /* Dark green text */
+
+    --card: 0 0% 100%;
+    --card-foreground: 150 50% 5%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 50% 5%;
+
+    --primary: 142 76% 36%;
+    /* Standard Green */
+    --primary-foreground: 355.7 100% 97.3%;
+
+    --secondary: 140 30% 90%;
+    /* Light green secondary */
+    --secondary-foreground: 150 50% 5%;
+
+    --muted: 140 30% 90%;
+    --muted-foreground: 150 40% 40%;
+
+    --accent: 140 30% 90%;
+    --accent-foreground: 150 50% 5%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 142 30% 90%;
+    --input: 142 30% 90%;
+    --ring: 142 76% 36%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 150 30% 5%;
+    /* Very deep green */
+    --foreground: 140 30% 90%;
+    /* Light green-tinted white */
+
+    --card: 150 20% 10%;
+    /* Dark card for contrast */
+    --card-foreground: 140 30% 90%;
+
+    --popover: 150 20% 10%;
+    --popover-foreground: 140 30% 90%;
+
+    --primary: 142 70% 45%;
+    /* Vibrant Green */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 150 20% 15%;
+    --secondary-foreground: 140 30% 90%;
+
+    --muted: 150 20% 15%;
+    /* Muted deeper green */
+    --muted-foreground: 140 20% 70%;
+
+    --accent: 150 20% 18%;
+    --accent-foreground: 140 30% 90%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 150 20% 18%;
+    --input: 150 20% 18%;
+    --ring: 142 70% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground;
   }
 }

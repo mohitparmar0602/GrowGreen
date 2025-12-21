@@ -58,7 +58,7 @@ export default function Login() {
 
         try {
             const res = await axios.post('http://localhost:5000/api/auth/login', {
-                email, // API accepts email field which can be email or username
+                email, // API accepts email field
                 password
             });
             // Store token
@@ -77,15 +77,15 @@ export default function Login() {
     };
 
     return (
-        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-green-50/30">
-            <Card className="w-full max-w-md border-green-100 shadow-xl bg-white/80 backdrop-blur-sm">
+        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-green-50/30 dark:bg-background">
+            <Card className="w-full max-w-md border-green-100 dark:border-border shadow-xl bg-white/80 dark:bg-card/80 backdrop-blur-sm">
                 <CardHeader className="space-y-1 text-center">
                     <div className="flex justify-center mb-4">
-                        <div className="p-3 bg-green-100 rounded-full">
+                        <div className="p-3 bg-green-100 dark:bg-primary/20 rounded-full">
                             <Leaf className="h-8 w-8 text-primary" />
                         </div>
                     </div>
-                    <CardTitle className="text-2xl font-bold tracking-tight text-green-950">
+                    <CardTitle className="text-2xl font-bold tracking-tight text-green-950 dark:text-foreground">
                         Welcome back
                     </CardTitle>
                     <CardDescription>
@@ -96,14 +96,14 @@ export default function Login() {
                     <form onSubmit={handleLogin} className="space-y-4">
                         <div className="space-y-2">
                             <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                Email or Username
+                                Email
                             </label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                 <input
                                     id="email"
-                                    type="text"
-                                    placeholder="m@example.com or username"
+                                    type="email"
+                                    placeholder="m@example.com"
                                     className={cn(
                                         "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10",
                                         error && "border-red-500 focus-visible:ring-red-500"
@@ -162,7 +162,7 @@ export default function Login() {
                             <span className="w-full border-t" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-white px-2 text-muted-foreground">
+                            <span className="bg-background px-2 text-muted-foreground">
                                 Or continue with
                             </span>
                         </div>
