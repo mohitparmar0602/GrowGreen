@@ -14,13 +14,13 @@ export default function Marketplace() {
                 <CategoryCard
                     icon={<Sprout className="h-8 w-8" />}
                     title="Seeds"
-                    count="20 Items"
-                    image="/category_seeds_uploaded.jpg"
+                    count="12 Items"
+                    image="/seeds_collection.jpg"
                 />
                 <CategoryCard
                     icon={<TrendingUp className="h-8 w-8" />}
                     title="Fertilizers"
-                    count="20 Items"
+                    count="12 Items"
                     image="https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=800&auto=format&fit=crop&q=60"
                 />
             </div>

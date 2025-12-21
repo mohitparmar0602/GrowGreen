@@ -97,7 +97,7 @@ export default function Navbar() {
                         {theme === 'light' ? <Moon /> : <Sun />}
                     </Button>
 
-                    {!user?.isAdmin && (
+                    {user && !user.isAdmin && (
                         <div className="relative cursor-pointer" onClick={() => navigate('/cart')}>
                             <ShoppingCart />
                             {cartCount > 0 && (
