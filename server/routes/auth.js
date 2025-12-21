@@ -57,7 +57,10 @@ router.post('/register', async (req, res) => {
                 id: savedUser._id,
                 username: savedUser.username,
                 email: savedUser.email,
-                isAdmin: savedUser.isAdmin
+                email: savedUser.email,
+                isAdmin: savedUser.isAdmin,
+                mobileNo: savedUser.mobileNo,
+                address: savedUser.address
             }
         });
 
@@ -107,7 +110,10 @@ router.post('/login', async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                isAdmin: user.isAdmin
+                email: user.email,
+                isAdmin: user.isAdmin,
+                mobileNo: user.mobileNo,
+                address: user.address
             }
         });
 
@@ -119,5 +125,55 @@ router.post('/login', async (req, res) => {
 
 
 
+
+
+// Get all users (Admin only)
+router.get('/users', async (req, res) => {
+    try {
+        // In a real app, middleware should check if req.user.isAdmin is true
+        // For now, we'll just return all users
+        const users = await User.find({ isAdmin: false }).select('-password').sort({ createdAt: -1 });
+        res.json(users);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
+// Update Profile
+router.put('/update/:id', async (req, res) => {
+    try {
+        const { username, mobileNo, address } = req.body;
+
+        // Find user
+        let user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Update fields
+        if (username) user.username = username;
+        if (mobileNo) user.mobileNo = mobileNo;
+        if (address) user.address = address;
+
+        await user.save();
+
+        res.json({
+            success: true,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                isAdmin: user.isAdmin,
+                mobileNo: user.mobileNo,
+                address: user.address
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
 
 module.exports = router;

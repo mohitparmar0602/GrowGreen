@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { User, Mail, Shield, Calendar, Package, ShoppingBag, Phone } from 'lucide-react';
+import { User, Mail, Shield, Calendar, Package, ShoppingBag, Phone, MapPin } from 'lucide-react';
 import axios from 'axios';
 import { Badge } from '../components/ui/badge';
 
@@ -127,6 +127,18 @@ export default function Profile() {
                                             <p className="text-xs font-medium text-muted-foreground uppercase">Mobile Number</p>
                                             <p className="text-sm font-semibold text-foreground">
                                                 {user.mobileNo || 'Not provided'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center space-x-4 p-3 rounded-lg bg-muted/50 border border-border">
+                                        <div className="p-2 bg-card rounded-md shadow-sm">
+                                            <MapPin className="h-5 w-5 text-muted-foreground" />
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-medium text-muted-foreground uppercase">Shipping Address</p>
+                                            <p className="text-sm font-semibold text-foreground whitespace-pre-wrap">
+                                                {user.address || 'Not provided'}
                                             </p>
                                         </div>
                                     </div>

@@ -48,24 +48,7 @@ export default function Navbar() {
                 Marketplace
             </Link>
 
-            {user?.isAdmin && (
-                <>
-                    <Link
-                        to="/suppliers"
-                        className={cn("transition-colors hover:text-primary", isActive('/suppliers'), mobile ? "py-2 text-lg" : "text-sm font-medium")}
-                        onClick={closeMenu}
-                    >
-                        Suppliers
-                    </Link>
-                    <Link
-                        to="/farmers"
-                        className={cn("transition-colors hover:text-primary", isActive('/farmers'), mobile ? "py-2 text-lg" : "text-sm font-medium")}
-                        onClick={closeMenu}
-                    >
-                        Farmers
-                    </Link>
-                </>
-            )}
+
         </>
     );
 
