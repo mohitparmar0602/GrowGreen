@@ -15,33 +15,65 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/seed-mark
 
 const products = [];
 
-// Generate 20 Seeds
-const seedNames = ['Golden Wheat', 'Royal Rice', 'Hybrid Tomato', 'Sweet Corn', 'Mustard', 'Sunflower', 'Cotton', 'Soybean', 'Barley', 'Oats', 'Millet', 'Sorghum', 'Pumpkin', 'Watermelon', 'Cucumber', 'Carrot', 'Radish', 'Spinach', 'Peas', 'Beans'];
+// Generate 12 Seeds
+const seedNames = ['Golden Wheat', 'Royal Rice', 'Hybrid Tomato', 'Sweet Corn', 'Mustard', 'Sunflower', 'Cotton', 'Pumpkin', 'Watermelon', 'Carrot', 'Radish', 'Spinach'];
 
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 12; i++) {
+    const seedImages = {
+        'Golden Wheat': '/golden_wheat_seeds.jpg',
+        'Royal Rice': '/royal_rice_seeds.jpg',
+        'Hybrid Tomato': '/hybrid_tomato_seeds.jpg',
+        'Sweet Corn': '/sweet_corn_seeds.jpg',
+        'Mustard': '/mustard_seeds.jpg',
+        'Sunflower': '/sunflower_seeds.jpg',
+        'Cotton': '/cotton_seeds.jpg',
+        'Pumpkin': '/pumpkin_seeds.jpg',
+        'Watermelon': '/watermelon_seeds.jpg',
+        'Carrot': '/carrot_seeds.jpg',
+        'Radish': '/radish_seeds.jpg',
+        'Spinach': '/spinach_seeds.jpg'
+    };
+    const seedName = seedNames[i % seedNames.length];
+
     products.push({
-        name: `${i + 1}. ${seedNames[i % seedNames.length]} Seeds`,
+        name: `${i + 1}. ${seedName} Seeds`,
         category: 'Seeds',
         price: Math.floor(Math.random() * 1000) + 100,
         unit: 'kg',
-        image: 'https://placehold.co/400x300?text=No+Image', // Placeholder
-        description: `High-quality ${seedNames[i % seedNames.length]} seeds for optimal yield.`,
+        image: seedImages[seedName] || '/seeds_collection.jpg',
+        description: `High-quality ${seedName} seeds for optimal yield.`,
         supplier: i % 2 === 0 ? 'Green Earth Farms' : 'Sunny Fields',
         stock: Math.floor(Math.random() * 500) + 50
     });
 }
 
-// Generate 20 Fertilizers
+// Generate 12 Fertilizers
 const fertNames = ['NPK 19-19-19', 'Urea', 'DAP', 'Potash', 'Organic Compost', 'Bone Meal', 'Fish Emulsion', 'Seaweed Extract', 'Cow Manure', 'Vermicompost', 'Zinc Sulphate', 'Magnesium Sulphate', 'Calcium Nitrate', 'Boron', 'Iron Chelate', 'Sulfur', 'Bio-Fertilizer', 'Growth Booster', 'Root Developer', 'Flower Enhancer'];
 
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 12; i++) {
+    const fertImages = {
+        'NPK 19-19-19': '/npk_19_19_19_mix.jpg',
+        'Urea': '/urea_mix.jpg',
+        'DAP': '/dap_mix.jpg',
+        'Potash': '/potash_mix.jpg',
+        'Organic Compost': '/organic_compost_mix.jpg',
+        'Bone Meal': '/bone_meal_mix.jpg',
+        'Fish Emulsion': '/fish_emulsion_mix.jpg',
+        'Seaweed Extract': '/seaweed_extract_mix.jpg',
+        'Cow Manure': '/cow_manure_mix.jpg',
+        'Vermicompost': '/vermicompost_mix.jpg',
+        'Zinc Sulphate': '/zinc_sulphate_mix.jpg',
+        'Magnesium Sulphate': '/magnesium_sulphate_mix.jpg'
+    };
+    const fertName = fertNames[i % fertNames.length];
+
     products.push({
-        name: `${i + 1}. ${fertNames[i % fertNames.length]} Mix`,
+        name: `${i + 1}. ${fertName} Mix`,
         category: 'Fertilizers',
         price: Math.floor(Math.random() * 2000) + 200,
         unit: 'bag',
-        image: 'https://placehold.co/400x300?text=No+Image', // Placeholder
-        description: `Premium quality ${fertNames[i % fertNames.length]} for healthy plant growth.`,
+        image: fertImages[fertName] || 'https://placehold.co/400x300?text=No+Image',
+        description: `Premium quality ${fertName} for healthy plant growth.`,
         supplier: i % 2 === 0 ? 'AgroChem Industries' : 'Nature Best',
         stock: Math.floor(Math.random() * 300) + 20
     });
