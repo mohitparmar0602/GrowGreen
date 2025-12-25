@@ -13,6 +13,8 @@ import SupplierDetails from './pages/SupplierDetails';
 import Farmers from './pages/Farmers';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -29,6 +31,8 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
               <Route path="/register" element={<Register />} />
               <Route path="/category/:category" element={<CategoryProducts />} />
               <Route path="/suppliers" element={<Suppliers />} />

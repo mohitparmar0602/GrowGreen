@@ -119,7 +119,7 @@ export default function Login() {
                                 <label htmlFor="password" className="text-sm font-medium leading-none">
                                     Password
                                 </label>
-                                <Link to="#" className="text-sm font-medium text-primary hover:underline">
+                                <Link to="/forgot-password" className="text-sm font-medium text-primary hover:underline">
                                     Forgot password?
                                 </Link>
                             </div>

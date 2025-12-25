@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { getSuppliers, getStockData } from '../data/mockData';
-import { Users, Package, TrendingUp, IndianRupee, Store, AlertTriangle } from 'lucide-react';
+import { Users, Package, TrendingUp, IndianRupee, Store, AlertTriangle, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Badge } from '../components/ui/badge';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -220,17 +221,27 @@ export default function AdminDashboard() {
                         {lowStockItems.length === 0 ? (
                             <p className="text-center text-muted-foreground">All items are sufficiently stocked.</p>
                         ) : (
-                            lowStockItems.map((item, i) => (
-                                <div key={i} className="flex justify-between items-center p-3 border rounded-lg bg-red-50/50 border-red-100">
-                                    <div>
-                                        <p className="font-medium text-slate-800">{item.product}</p>
-                                        <p className="text-xs text-red-600 font-semibold">{item.status}</p>
+                            lowStockItems.map((item, i) => {
+                                const isOutOfStock = item.stock <= 0;
+                                return (
+                                    <div key={i} className={`flex justify-between items-center p-4 border rounded-xl transition-all ${isOutOfStock ? 'bg-red-50/50 border-red-100' : 'bg-amber-50/50 border-amber-100'}`}>
+                                        <div className="flex items-center gap-3">
+                                            <div className={`h-10 w-10 rounded-full flex items-center justify-center ${isOutOfStock ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>
+                                                {isOutOfStock ? <AlertCircle className="h-5 w-5" /> : <AlertTriangle className="h-5 w-5" />}
+                                            </div>
+                                            <div>
+                                                <p className="font-semibold text-slate-800 dark:text-slate-100">{item.product}</p>
+                                                <p className={`text-xs font-medium uppercase tracking-wide ${isOutOfStock ? 'text-red-600' : 'text-amber-600'}`}>
+                                                    {item.status}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <Badge variant="outline" className={`px-3 py-1 text-sm font-bold border-2 ${isOutOfStock ? 'bg-white border-red-100 text-red-700' : 'bg-white border-amber-100 text-amber-700'}`}>
+                                            {item.stock} Units
+                                        </Badge>
                                     </div>
-                                    <div className="text-sm font-bold bg-white px-3 py-1 rounded border shadow-sm">
-                                        Qty: {item.stock}
-                                    </div>
-                                </div>
-                            ))
+                                );
+                            })
                         )}
                     </div>
                 </DialogContent>

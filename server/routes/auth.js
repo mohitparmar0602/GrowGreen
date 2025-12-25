@@ -57,7 +57,6 @@ router.post('/register', async (req, res) => {
                 id: savedUser._id,
                 username: savedUser.username,
                 email: savedUser.email,
-                email: savedUser.email,
                 isAdmin: savedUser.isAdmin,
                 mobileNo: savedUser.mobileNo,
                 address: savedUser.address
@@ -66,6 +65,9 @@ router.post('/register', async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        if (err.code === 11000) {
+            return res.status(400).json({ message: 'Email already exists' });
+        }
         if (err.code === 'EAUTH' || err.message.includes('Invalid login')) {
             return res.status(500).json({ message: 'User created, but email failed: Check Server SMTP Credentials' });
         }
@@ -126,6 +128,81 @@ router.post('/login', async (req, res) => {
 
 
 
+
+// Forgot Password
+router.post('/forgot-password', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Generate reset token (valid for 15 mins)
+        const resetToken = jwt.sign(
+            { id: user._id },
+            process.env.JWT_SECRET || 'secret_key_123',
+            { expiresIn: '15m' }
+        );
+
+        // In a real app, send email here.
+        // For simulation, return the token/link.
+        const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+
+        res.json({
+            message: 'Password reset link generated',
+            resetLink // Simulation only
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
+// Reset Password
+router.post('/reset-password', async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        if (!token || !newPassword) {
+            return res.status(400).json({ message: 'Invalid request' });
+        }
+
+        let decoded;
+        try {
+            decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key_123');
+        } catch (e) {
+            return res.status(400).json({ message: 'Invalid or expired token' });
+        }
+
+        const user = await User.findById(decoded.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Validation for new password
+        const hasLetter = /[a-zA-Z]/.test(newPassword);
+        const hasNumber = /[0-9]/.test(newPassword);
+        if (!hasLetter || !hasNumber) {
+            return res.status(400).json({ message: 'Password must be alphanumeric' });
+        }
+
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        res.json({ message: 'Password updated successfully' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
 
 // Get all users (Admin only)
 router.get('/users', async (req, res) => {
