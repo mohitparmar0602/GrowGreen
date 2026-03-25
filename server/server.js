@@ -7,7 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+const origin = process.env.CLIENT_URL || "*";
+app.use(cors({ origin: origin, credentials: true }));
 app.use(express.json());
 
 // Database Connection

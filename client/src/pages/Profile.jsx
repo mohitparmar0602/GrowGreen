@@ -42,7 +42,7 @@ export default function Profile() {
         if (user?.email) {
             const fetchOrders = async () => {
                 try {
-                    const res = await axios.get(`http://localhost:5000/api/orders/user/${user.email}`);
+                    const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/orders/user/${user.email}`);
                     setOrders(res.data);
                 } catch (err) {
                     console.error("Failed to fetch orders:", err);

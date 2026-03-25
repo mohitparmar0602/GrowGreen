@@ -49,7 +49,7 @@ export default function Checkout() {
                 shippingAddress: formData
             };
 
-            await axios.post('http://localhost:5000/api/orders', orderData);
+            await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/orders`, orderData);
 
             clearCart();
             alert("Order placed successfully!");

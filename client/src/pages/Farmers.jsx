@@ -10,7 +10,7 @@ export default function Farmers() {
     React.useEffect(() => {
         const fetchFarmers = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/auth/users');
+                const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/auth/users`);
                 setFarmers(res.data);
             } catch (err) {
                 console.error("Error fetching farmers:", err);

@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
     const updateProfile = async (userId, updatedData) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/auth/update/${userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/auth/update/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

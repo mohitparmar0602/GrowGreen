@@ -20,7 +20,7 @@ export default function CategoryProducts() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/products');
+                const response = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/products`);
                 // Filter based on the category param
                 // Note: The API returns all products, so we filter here. Do case-insensitive comparison if needed.
                 const allProducts = response.data;
